@@ -21,6 +21,6 @@ class Product extends Model
 
     public function isAvailable()
     {
-        return $this->status == Product::AVAILABLE_PRODUCT; 
+        return $this->status == Product::AVAILABLE_PRODUCT;
     }
 }
