@@ -12,7 +12,33 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+/**
+ * Buyers
+ */
+Route::resource('buyers', 'Buyer\BuyerController', ['only' => ['index', 'show']]);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+/**
+ * Categories
+ */
+Route::resource('categories', 'Category\CategoryController', ['except' => ['create', 'edit']]);
+
+/**
+ * Buyers
+ */
+Route::resource('products', 'Product\ProductController', ['only' => ['index', 'show']]);
+
+/**
+ * Buyers
+ */
+Route::resource('sellers', 'Seller\SellerController', ['only' => ['index', 'show']]);
+
+/**
+ * Buyers
+ */
+Route::resource('transactions', 'Transaction\TransactionController', ['only' => ['index', 'show']]);
+
+/**
+ * Buyers
+ */
+Route::resource('users', 'User\UserController',  ['except' => ['create', 'edit']]);
+
