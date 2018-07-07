@@ -43,6 +43,26 @@ class User extends Authenticatable
     ];
 
 
+
+
+    //-----------------------------------       Mutator --------------------------------//
+    public function setNameAttribute($name)
+    {
+        $this->attributes['name'] = strtolower($name);
+    }
+
+    public function getNameAttribute($name)
+    {
+        return ucwords($name);
+    }
+
+    public function setEmailAttribute($email)
+    {
+        $this->attributes['email'] = strtolower($email);
+    }
+    //----------------------------------------------------------------------------------//
+
+    //------------------------------------- Custom Methods ----------------------------//
     public function isVerified()
     {
         return $this->verified == User::VERIFIED_USER;
@@ -57,5 +77,5 @@ class User extends Authenticatable
     {
         return str_random(40);
     }
-
+    //----------------------------------------------------------------------------------//
 }
