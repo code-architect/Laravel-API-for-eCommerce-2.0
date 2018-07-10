@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use App\Traits\ApiResponser;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 
@@ -41,15 +42,24 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param Exception $exception
+     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function render($request, Exception $exception)
     {
-        if($exception instanceof ValidationException){
+        if ($exception instanceof ValidationException) {
             return $this->convertValidationExceptionToResponse($exception, $request);
         }
+
+        // If Model Not found (e.g: not existing user error)
+        if ($exception instanceof ModelNotFoundException) {
+            $modelName = strtolower(class_basename($exception->getModel()));
+            return $this->errorResponse("Does not exists any {$modelName} with the specified identificator", 404);
+        }
+
+        
+
         return parent::render($request, $exception);
     }
 
