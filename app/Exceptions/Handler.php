@@ -58,25 +58,27 @@ class Handler extends ExceptionHandler
             return $this->errorResponse("Does not exists any {$modelName} with the specified identificator", 404);
         }
 
-        
+        // Handling the Unauthorized exception
+        if ($exception instanceof AuthenticationException) {
+            return $this->unauthenticated($request, $exception);
+        }
+
+
 
         return parent::render($request, $exception);
     }
+
 
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Illuminate\Auth\AuthenticationException  $exception
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        if ($request->expectsJson()) {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
-        }
-
-        return redirect()->guest('login');
+        return $this->errorResponse('Unauthenticated.', 401);
     }
 
 
