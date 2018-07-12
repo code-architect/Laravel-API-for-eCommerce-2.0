@@ -96,9 +96,13 @@ class Handler extends ExceptionHandler
             }
         }
 
+        // If we are in development mode return all errors
+        if(config('app.debug')) {
+            return parent::render($request, $exception);
+        }
 
-
-        return parent::render($request, $exception);
+        // Return This in production mode
+        return $this->errorResponse('Unexpected Exception. Try Layer.', 500);
     }
 
 
