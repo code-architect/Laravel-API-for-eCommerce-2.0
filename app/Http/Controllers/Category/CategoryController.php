@@ -29,7 +29,16 @@ class CategoryController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'name'=> 'required',
+            'description' => 'required'
+        ];
+
+        $this->validate($request, $rules);
+
+        $newCategory = Category::create($request->all());
+
+        return $this->showOne($newCategory, 201);
     }
 
     /**
@@ -43,27 +52,26 @@ class CategoryController extends ApiController
         return $this->showOne($category);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $category->fill($request->intersect([
+            'name',
+            'description',
+        ]));
+
+        if($category->isClean()){
+            return $this->errorResponse('Please specify a value to be updated', 422);
+        }
+        $category->save();
+        return $this->showOne($category);
     }
 
     /**
