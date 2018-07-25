@@ -9,7 +9,7 @@ use App\Http\Controllers\ApiController;
 class TransactionCategoryController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * Displaying all the categories for a specific transaction.
      *
      * @param Transaction $transaction
      * @return \Illuminate\Http\JsonResponse

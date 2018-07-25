@@ -9,7 +9,7 @@ use App\Http\Controllers\ApiController;
 class TransactionSellerController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * Displaying the Seller based on the transaction ID.
      *
      * @param Transaction $transaction
      * @return \Illuminate\Http\JsonResponse
