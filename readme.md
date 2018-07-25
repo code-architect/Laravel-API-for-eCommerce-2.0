@@ -39,3 +39,4 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
 "# Laravel-API-for-eCommerce-2.0" 
+https://guides.github.com/features/mastering-markdown/
