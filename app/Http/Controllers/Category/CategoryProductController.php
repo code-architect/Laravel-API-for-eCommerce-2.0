@@ -9,7 +9,7 @@ use App\Http\Controllers\ApiController;
 class CategoryProductController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of products under a category.
      *
      * @param Category $category
      * @return \Illuminate\Http\JsonResponse
