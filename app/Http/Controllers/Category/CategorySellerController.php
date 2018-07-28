@@ -9,7 +9,7 @@ use App\Http\Controllers\ApiController;
 class CategorySellerController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of all the sellers under a single category.
      *
      * @param Category $category
      * @return \Illuminate\Http\JsonResponse
