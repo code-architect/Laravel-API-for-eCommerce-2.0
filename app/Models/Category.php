@@ -13,7 +13,7 @@ class Category extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = ['name', 'description'];
 
-
+    protected $hidden = ['pivot'];
 
     // -------------------- Relations -----------------------------------------------//
     public function products()

@@ -21,7 +21,7 @@ class CategoryTransactionController extends ApiController
                                              ->with('transactions')
                                              ->get()
                                              ->pluck('transactions')
-                                             ->collapse();
+                                             ->collapse(); //collapsing all the collection into one
 
         return $this->showAll($transactions);
     }
