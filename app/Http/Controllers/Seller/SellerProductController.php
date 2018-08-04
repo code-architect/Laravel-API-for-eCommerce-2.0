@@ -99,12 +99,17 @@ class SellerProductController extends ApiController
     /**
      * Remove the specified resource from storage.
      *
+     * @param Product $product
      * @param  \App\Models\Seller  $seller
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Seller $seller)
+    public function destroy(Seller $seller, Product $product)
     {
-        //
+        $this->checkSeller($seller, $product);  // check if the seller is the product owner
+
+        $product->delete();
+
+        return $this->showOne($product);
     }
 
 
