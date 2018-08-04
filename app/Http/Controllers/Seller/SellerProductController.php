@@ -7,6 +7,7 @@ use App\Models\Seller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SellerProductController extends ApiController
 {
@@ -25,7 +26,7 @@ class SellerProductController extends ApiController
 
 
     /**
-     * Store a newly created resource in storage.
+     * Store Method for creating new product under seller.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param User $seller
@@ -37,7 +38,6 @@ class SellerProductController extends ApiController
             'name'  => 'required',
             'description'  => 'required',
             'quantity'  => 'required|integer|min:1',
-            'image'  => 'required|image',
         ];
 
         $this->validate($request, $rules);
@@ -53,15 +53,47 @@ class SellerProductController extends ApiController
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified product of a specified seller based on id in storage.
      *
+     * @param Product $product
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Seller  $seller
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Seller $seller)
-    {
 
+    public function update(Request $request, Seller $seller, Product $product)
+    {
+        $rules = [
+            'quantity' => 'integer|min:1',
+            'status' => 'in:'.Product::UNAVAILABLE_PRODUCT.','.Product::AVAILABLE_PRODUCT,
+        ];
+
+        $this->validate($request, $rules);
+
+        $this->checkSeller($seller, $product);
+
+        $product->fill($request->intersect([    // this ignore null or empty values
+            'name',
+            'description',
+            'quantity',
+            'image'
+        ]));
+
+        // check if status is there and if product has at least one category
+        if($request->has('status')){
+            $product->status = $request->status;
+            if($product->isAvailable() && $product->categories()->count() == 0){
+                return $this->errorResponse('An active product must have at least one category', 409);
+            }
+        }
+
+        if($product->isClean()){
+            return $this->errorResponse('You need to change some values to update', 422);
+        }
+
+        $product->save();
+
+        return $this->showOne($product);
     }
 
     /**
@@ -73,5 +105,21 @@ class SellerProductController extends ApiController
     public function destroy(Seller $seller)
     {
         //
+    }
+
+
+    //------------------------------------- Additional Methods --------------------------------------------//
+
+    /**
+     * Checks if the seller is the owner of the product
+     *
+     * @param Seller $seller
+     * @param Product $product
+     */
+    protected function checkSeller(Seller $seller, Product $product)
+    {
+        if($seller->id != $product->seller_id){
+            throw new HttpException(422, 'The specified seller is not the actual seller of the product');
+        }
     }
 }
