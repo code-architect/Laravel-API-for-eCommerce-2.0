@@ -9,7 +9,7 @@ use App\Http\Controllers\ApiController;
 class ProductTransactionController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * Display all transaction of a specific product
      *
      * @param Product $product
      * @return \Illuminate\Http\JsonResponse
