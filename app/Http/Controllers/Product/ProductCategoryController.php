@@ -39,13 +39,20 @@ class ProductCategoryController extends ApiController
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Removing the relation from the pivot table
      *
      * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @param  \App\Models\Category $category
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product, Category $category)
     {
-        //
+        // check if the category exists in the list of the categories of the product
+        if(!$product->categories()->find($category->id)){
+            return $this->errorResponse('This specified category is not a category of this product', 404);
+        }
+
+        $product->categories()->detach($category->id);
+        return $this->showAll($product->categories);
     }
 }
