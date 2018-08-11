@@ -88,6 +88,12 @@ class SellerProductController extends ApiController
             }
         }
 
+        if($request->hasFile('image'))
+        {
+            Storage::delete($product->image);
+            $product->image = $request->image->store('');
+        }
+
         if($product->isClean()){
             return $this->errorResponse('You need to change some values to update', 422);
         }
@@ -110,7 +116,7 @@ class SellerProductController extends ApiController
 
         $product->delete();
         Storage::delete($product->image);
-        
+
         return $this->showOne($product);
     }
 
