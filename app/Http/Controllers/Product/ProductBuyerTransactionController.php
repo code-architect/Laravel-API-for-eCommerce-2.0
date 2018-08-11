@@ -14,7 +14,7 @@ class ProductBuyerTransactionController extends ApiController
 {
 
     /**
-     * Transaction of a product between Buyer and Seller    
+     * Transaction of a product between Buyer and Seller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param $product
