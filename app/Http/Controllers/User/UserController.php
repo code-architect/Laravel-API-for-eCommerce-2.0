@@ -116,4 +116,17 @@ class UserController extends ApiController
 
         return $this->showOne($user);
     }
+
+
+    //-------------------------- Native Methods ------------------------------------//
+    public function verify($token)
+    {
+        $user = User::where('verification_token', $token)->firstOrFail();
+
+        $user->verified = User::VERIFIED_USER;
+        $user->verification_token = null;   // after verification remove the token
+        $user->save();
+
+        return $this->showMessage('The account has been verified successfully');
+    }
 }
