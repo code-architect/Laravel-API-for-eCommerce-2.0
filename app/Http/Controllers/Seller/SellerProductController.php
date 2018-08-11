@@ -7,6 +7,7 @@ use App\Models\Seller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SellerProductController extends ApiController
@@ -108,7 +109,8 @@ class SellerProductController extends ApiController
         $this->checkSeller($seller, $product);  // check if the seller is the product owner
 
         $product->delete();
-
+        Storage::delete($product->image);
+        
         return $this->showOne($product);
     }
 
