@@ -32,6 +32,6 @@ class UserCreated extends Mailable
     public function build()
     {
         // laravel is automatically passing $user in this view, so we don't need to do it
-        return $this->text('emails.welcome');
+        return $this->markdown('emails.welcome')->subject("Welcome New User, Please verify your account");
     }
 }
