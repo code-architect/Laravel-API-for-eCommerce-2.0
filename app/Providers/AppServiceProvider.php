@@ -21,15 +21,24 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
+        // Event listener for sending user verification email for creating an account
         User::created(function($user){
-            Mail::to($user)->send(new UserCreated($user));
+            // retry to send mail 5 times every 1 second
+            retry(5, function() use($user) {
+                Mail::to($user)->send(new UserCreated($user));
+            }, 100);
         });
 
+        // Event listener for sending verification email to use when user updates it's email
         User::updated(function($user){
             if($user->isDirty('email')){
-                Mail::to($user)->send(new UserMailChanged($user));
+                // retry to send mail 5 times every 1 second
+                retry(5, function() use($user) {
+                    Mail::to($user)->send(new UserMailChanged($user));
+                }, 100);
             }
         });
+
 
         Product::updated(function($product){
             if($product->quantity == 0 && $product->isAvailable())

@@ -87,7 +87,8 @@ class SellerProductController extends ApiController
                 return $this->errorResponse('An active product must have at least one category', 409);
             }
         }
-
+        
+        //  Delete Image if existing and update new image
         if($request->hasFile('image'))
         {
             Storage::delete($product->image);
