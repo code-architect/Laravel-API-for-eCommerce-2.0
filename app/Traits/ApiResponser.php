@@ -37,7 +37,15 @@ trait ApiResponser{
      */
     protected function showAll(Collection $collection, $code =200)
     {
-        return $this->successResponse(['data' => $collection], $code);
+        //if the collection is empty
+        if($collection->isEmpty())
+        {
+            return $this->successResponse(['data' => $collection], $code);
+        }
+        //if the collection is not empty then transform the data accordingly and then return
+        $transformer = $collection->first()->transformer;
+        $collection = $this->transformData($collection, $transformer);
+        return $this->successResponse($collection, $code);
     }
 
     /**
@@ -48,7 +56,9 @@ trait ApiResponser{
      */
     protected function showOne(Model $model, $code = 200)
     {
-        return $this->successResponse(['data' => $model], $code);
+        $transformer = $model->first()->transformer;
+        $model = $this->transformData($model, $transformer);
+        return $this->successResponse($model, $code);
     }
 
     /**
@@ -61,4 +71,13 @@ trait ApiResponser{
     {
         return $this->successResponse(['data' => $message], $code);
     }
+
+
+    protected function transformData($data, $transformer)
+    {
+        $transformation = fractal($data, new $transformer);
+
+        return  $transformation->toArray();
+    }
+
 }

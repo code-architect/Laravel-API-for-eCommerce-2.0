@@ -17,14 +17,14 @@ class ProductTransformer extends TransformerAbstract
     {
         return [
             'id'            =>  (int)$product->id,
-            'title'         =>  $product->name,
-            'details'       =>  $product->description,
-            'stock'         =>  $product->quantity,
-            'situation'     =>  $product->status,
+            'title'         =>  (string)$product->name,
+            'details'       =>  (string)$product->description,
+            'stock'         =>  (int)$product->quantity,
+            'situation'     =>  (string)$product->status,
             'picture'       =>  url("img/{$product->image}"),
             'seller'        =>  (int)$product->seller_id,
-            'creationDate'  =>  $product->created_at,
-            'lastChange'    =>  $product->updated_at,
+            'creationDate'  =>  (string)$product->created_at,
+            'lastChange'    =>  (string)$product->updated_at,
             'deleteDate'    =>  isset($product->deleted_at) ? (string)$product->deleted_at : null,
         ];
     }

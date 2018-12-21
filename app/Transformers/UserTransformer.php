@@ -5,7 +5,7 @@ namespace App\Transformers;
 use App\Models\User;
 use League\Fractal\TransformerAbstract;
 
-class userTransformer extends TransformerAbstract
+class UserTransformer extends TransformerAbstract
 {
     /**
      * A Fractal transformer.
@@ -20,8 +20,8 @@ class userTransformer extends TransformerAbstract
             'email'         =>  $user->email,
             'isVerified'    =>  (int)$user->verified,
             'isAdmin'       =>  ($user->admin === 'true'),
-            'creationDate'  =>  $user->created_at,
-            'lastChange'    =>  $user->updated_at,
+            'creationDate'  =>  (string)$user->created_at,
+            'lastChange'    =>  (string)$user->updated_at,
             'deleteDate'    =>  isset($user->deleted_at) ? (string)$user->deleted_at : null,
         ];
     }
