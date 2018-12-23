@@ -44,6 +44,7 @@ trait ApiResponser{
         }
         //if the collection is not empty then transform the data accordingly and then return
         $transformer = $collection->first()->transformer;
+        $collection = $this->filterData($collection, $transformer);
         $collection = $this->sortData($collection, $transformer);
         $collection = $this->transformData($collection, $transformer);
         return $this->successResponse($collection, $code);
@@ -75,15 +76,31 @@ trait ApiResponser{
     }
 
 
+    protected function filterData(Collection $collection, $transformer)
+    {
+        foreach(request()->query() as $key => $value)
+        {
+            $attribute = $transformer::originalAttribute($key);
+
+            if(isset($attribute, $value)) {
+                $collection = $collection->where($attribute, $value);
+            }
+        }
+        return $collection;
+    }
+
+
     /**
      * Sorting the data e.g. if we have localhost/users?sort_by=name
      * @param Collection $collection
+     * @param $transformer
      * @return Collection
      */
     protected function sortData(Collection $collection, $transformer)
     {
         if(request()->has('sort_by'))
         {
+            // based on the given transformer, we are getting the corresponding value of the database
             $attribute = $transformer::originalAttribute(request()->sort_by);
             $collection = $collection->sortBy->{$attribute};
         }
