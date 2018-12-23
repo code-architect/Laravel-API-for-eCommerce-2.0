@@ -44,7 +44,7 @@ trait ApiResponser{
         }
         //if the collection is not empty then transform the data accordingly and then return
         $transformer = $collection->first()->transformer;
-        $collection = $this->sortData($collection);
+        $collection = $this->sortData($collection, $transformer);
         $collection = $this->transformData($collection, $transformer);
         return $this->successResponse($collection, $code);
     }
@@ -80,15 +80,16 @@ trait ApiResponser{
      * @param Collection $collection
      * @return Collection
      */
-    protected function sortData(Collection $collection)
+    protected function sortData(Collection $collection, $transformer)
     {
         if(request()->has('sort_by'))
         {
-            $attribute = request()->sort_by;
+            $attribute = $transformer::originalAttribute(request()->sort_by);
             $collection = $collection->sortBy->{$attribute};
         }
         return $collection;
     }
+
 
     /**
      * Transforming data using fractals

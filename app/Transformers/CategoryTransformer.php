@@ -24,4 +24,24 @@ class CategoryTransformer extends TransformerAbstract
             'deleteDate'    =>  isset($category->deleted_at) ? (string)$category->deleted_at : null,
         ];
     }
+
+
+    /**
+     * Preventing sort function from accessing the original names from database
+     * @param $index
+     * @return mixed|null
+     */
+    public static function originalAttribute($index)
+    {
+        $attribute = [
+            'id'            =>  'id',
+            'title'         =>  'name',
+            'details'       =>  'description',
+            'creationDate'  =>  'created_at',
+            'lastChange'    =>  'updated_at',
+            'deleteDate'    =>  'deleted_at',
+        ];
+
+        return isset($attribute[$index]) ? $attribute[$index] : null;
+    }
 }
