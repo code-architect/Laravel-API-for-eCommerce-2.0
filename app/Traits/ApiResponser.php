@@ -2,8 +2,10 @@
 
 namespace App\Traits;
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Validator;
 
 trait ApiResponser{
 
@@ -44,9 +46,10 @@ trait ApiResponser{
         }
         //if the collection is not empty then transform the data accordingly and then return
         $transformer = $collection->first()->transformer;
-        $collection = $this->filterData($collection, $transformer);
-        $collection = $this->sortData($collection, $transformer);
-        $collection = $this->transformData($collection, $transformer);
+        $collection = $this->filterData($collection, $transformer);     // filter data if input is given by the user
+        $collection = $this->sortData($collection, $transformer);       // sort the data if parameters are given
+        $collection = $this->paginate($collection);       // sort the data if parameters are given
+        $collection = $this->transformData($collection, $transformer);  // transform the data
         return $this->successResponse($collection, $code);
     }
 
@@ -76,6 +79,12 @@ trait ApiResponser{
     }
 
 
+    /**
+     * Filtering data based on data fetched from the request which is coming from the user (input)
+     * @param Collection $collection
+     * @param $transformer
+     * @return Collection|static
+     */
     protected function filterData(Collection $collection, $transformer)
     {
         foreach(request()->query() as $key => $value)
@@ -105,6 +114,39 @@ trait ApiResponser{
             $collection = $collection->sortBy->{$attribute};
         }
         return $collection;
+    }
+
+
+    /**
+     * Paginating the results
+     * @param Collection $collection
+     * @return LengthAwarePaginator
+     */
+    protected function paginate(Collection $collection)
+    {
+        //validation for setting page limit by user
+        $rules = [
+            'per_page'  => 'integer|min:2|max:50'
+        ];
+
+        Validator::validate(request()->all(), $rules);
+
+        $page = LengthAwarePaginator::resolveCurrentPage();         // this is a laravel internal method and class
+        $perPage = 15;                                              // data per page
+
+        // check if request has a per_page value, if yes overwrite the existing $per_page
+        if(request()->has('per_page'))
+        {
+            $perPage = (int)request()->per_page;
+        }
+
+        $results = $collection->slice(($page-1) * $perPage, $perPage)->values();
+        $paginated = new LengthAwarePaginator($results, $collection->count(), $perPage, $page,
+            [ 'path' => LengthAwarePaginator::resolveCurrentPath() ]
+        );
+
+        $paginated->appends(request()->all());      // appending the other request parameters like sort_by etc
+        return $paginated;
     }
 
 
