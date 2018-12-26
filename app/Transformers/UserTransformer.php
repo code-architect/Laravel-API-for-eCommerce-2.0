@@ -23,6 +23,11 @@ class UserTransformer extends TransformerAbstract
             'creationDate'  =>  (string)$user->created_at,
             'lastChange'    =>  (string)$user->updated_at,
             'deleteDate'    =>  isset($user->deleted_at) ? (string)$user->deleted_at : null,
+
+            'links'         => [
+                'rel'   =>  'self',
+                'href'  =>  route('users.show', $user->id)
+            ],
         ];
     }
 
@@ -41,7 +46,7 @@ class UserTransformer extends TransformerAbstract
             'isAdmin'       =>  'admin',
             'creationDate'  =>  'created_at',
             'lastChange'    =>  'updated_at',
-            'deleteDate'    =>  'deleted_at'
+            'deleteDate'    =>  'deleted_at',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
