@@ -10,6 +10,7 @@ class UserTransformer extends TransformerAbstract
     /**
      * A Fractal transformer.
      *
+     * @param User $user
      * @return array
      */
     public function transform(User $user)
@@ -47,6 +48,23 @@ class UserTransformer extends TransformerAbstract
             'creationDate'  =>  'created_at',
             'lastChange'    =>  'updated_at',
             'deleteDate'    =>  'deleted_at',
+        ];
+
+        return isset($attribute[$index]) ? $attribute[$index] : null;
+    }
+
+
+    public static function transformedAttribute($index)
+    {
+        $attribute = [
+            'id'            =>'id',
+            'name'          =>'name',
+            'email'         =>'email',
+            'verified'      =>'isVerified',
+            'admin'         =>'isAdmin',
+            'created_at'    =>'creationDate',
+            'updated_at'    =>'lastChange',
+            'deleted_at'    =>'deleteDate'
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
