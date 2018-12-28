@@ -121,6 +121,11 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
+        // check if the request is from frontend or not
+        if($this->isFrontend($request)){
+            return redirect()->guest('login');
+        }
+
         return $this->errorResponse('Unauthenticated.', 401);
     }
 
@@ -136,6 +141,21 @@ class Handler extends ExceptionHandler
     {
         $errors = $e->validator->errors()->getMessages();
 
+        // checking if the request is from the frontend, if ajax request return json or else
+        // redirect back with given input and occurred error
+        if($this->isFrontend($request)){
+            return $request->ajax() ? response()->json($errors, 422) : redirect()
+                                                                                      ->back()
+                                                                                      ->withInput($request->input())
+                                                                                      ->withErrors($errors);
+        }
         return $this->errorResponse($errors, 422);
+    }
+
+    private function isFrontend($request)
+    {
+        // in here we are checking if the request is coming for the web or not, so
+        // we are making a collection and using internal function collect to create a collection
+        return $request->acceptsHtml() && collect($request->route()->middleware())->contains('web');
     }
 }
