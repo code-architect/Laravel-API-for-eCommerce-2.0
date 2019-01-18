@@ -9,6 +9,10 @@ use App\Http\Controllers\ApiController;
 
 class ProductCategoryController extends ApiController
 {
+    public function __construct()
+    {
+        $this->middleware('client.credentials')->only(['index']);
+    }
     /**
      * Display all categories of a specific product
      *

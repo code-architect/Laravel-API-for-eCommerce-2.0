@@ -8,6 +8,10 @@ use App\Http\Controllers\ApiController;
 
 class TransactionCategoryController extends ApiController
 {
+    public function __construct()
+    {
+        $this->middleware('client.credentials')->only(['index']);
+    }
     /**
      * Displaying all the categories for a specific transaction.
      *
