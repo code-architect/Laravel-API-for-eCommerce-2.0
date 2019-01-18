@@ -8,6 +8,10 @@ use App\Http\Controllers\ApiController;
 
 class BuyerProductController extends ApiController
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
     /**
      * Display all the products bought by the buyer, if remove the pluck() method we will get full details
      * In here we are using eager loading to obtain directly the product with in every transaction

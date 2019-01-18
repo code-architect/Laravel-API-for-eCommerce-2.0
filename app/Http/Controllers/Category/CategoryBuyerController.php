@@ -8,6 +8,10 @@ use App\Http\Controllers\ApiController;
 
 class CategoryBuyerController extends ApiController
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
     /**
      * Listing all unique buyers of a single category.
      *

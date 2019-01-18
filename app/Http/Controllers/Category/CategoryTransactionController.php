@@ -8,6 +8,10 @@ use App\Http\Controllers\ApiController;
 
 class CategoryTransactionController extends ApiController
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
     /**
      * Display a listing of all the transaction under a category, In here we have to be sure to obtain only
      * those products which will have transactions.

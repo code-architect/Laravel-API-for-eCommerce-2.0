@@ -8,6 +8,10 @@ use App\Http\Controllers\ApiController;
 
 class TransactionSellerController extends ApiController
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
     /**
      * Displaying the Seller based on the transaction ID.
      *

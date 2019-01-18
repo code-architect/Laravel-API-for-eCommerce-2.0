@@ -8,6 +8,10 @@ use App\Http\Controllers\ApiController;
 
 class CategorySellerController extends ApiController
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
     /**
      * Display a listing of all the sellers under a single category.
      *

@@ -8,6 +8,10 @@ use App\Http\Controllers\ApiController;
 
 class BuyerSellerController extends ApiController
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
     /**
      * Display a listing of the sellers the buyers bought from.
      * In here based on the relation the transaction has no direct relation with seller

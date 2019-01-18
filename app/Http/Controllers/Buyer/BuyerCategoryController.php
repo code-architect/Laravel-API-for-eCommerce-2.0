@@ -8,6 +8,12 @@ use App\Http\Controllers\ApiController;
 
 class BuyerCategoryController extends ApiController
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * Display a listing of categories used by the specific buyer.
      * After pluck() we are getting multiple collection. So we are using collapse() method from Laravel
